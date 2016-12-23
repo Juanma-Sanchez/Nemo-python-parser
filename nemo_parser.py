@@ -32,6 +32,10 @@ class Nemo_Node:
             self.properties = properties
     def __str__(self):
         string = "name: " + self.name + '\n' + "type: " + self.node_type
+        if self.properties:
+            string = string +'\n' + "properties: " + str(self.properties)
+        if self.sub_nodes:
+            string = string + '\n' + "subnodes: " + str(self.sub_nodes)
         return string
 
 def parse_Intent(intent_file):
@@ -47,19 +51,30 @@ def parse_Intent(intent_file):
         sentences.remove('')
     Intent.sentences = sentences
 
-    #Get network nodes
+    #Go over the intent sentence by sentence
     for sentence in Intent.sentences:
         sentence = sentence.replace(',','')
         sentence = sentence.replace(';','')
         words = sentence.split(' ')
-        #print words
         if words[0] == 'CREATE' or words[0] == 'IMPORT':
+            #Get nodes
             if words[1] == 'Node':
                 name = words [2]
                 node_type = words[4]
+                properties = {}
+                subnodes = []
                 if len(words) > 5:
+                    index = 6
                     if words[5] == 'Property':
-                        print "property"
-                Intent.objects.append_Node(name, node_type)       
+                        while index < len(words) - 1:
+                            node_property = words[index].replace(':', '')
+                            properties[node_property] = words[index +1].replace('"', '')
+                            index = index + 2
+                    if words[5] == 'Contain':
+                        while index < len(words):
+                            subnodes.append(words[index])
+                            index = index + 1
+                           
+                Intent.objects.append_Node(name, node_type, subnodes, properties)       
 
     return Intent
