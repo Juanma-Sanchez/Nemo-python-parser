@@ -8,4 +8,7 @@ for node in Intent.objects.nodes:
     print
     print "Node:"
     print node
-
+for con in Intent.objects.connections:
+    print
+    print "Connection:"
+    print con

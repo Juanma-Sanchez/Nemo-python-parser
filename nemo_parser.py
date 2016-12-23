@@ -16,6 +16,9 @@ class Nemo_objects:
     def append_Node(self, name, node_type, subnodes=None, properties=None):
         self.nodes.append(Nemo_Node(name, node_type, subnodes, properties))
 
+    def append_Connect(self, name, endpoints):
+        self.connections.append(Nemo_Connection(name, endpoints))
+
 class Nemo_Node:
 
     name = None
@@ -30,12 +33,26 @@ class Nemo_Node:
             self.sub_nodes = subnodes
         if properties:
             self.properties = properties
+
     def __str__(self):
         string = "name: " + self.name + '\n' + "type: " + self.node_type
         if self.properties:
             string = string +'\n' + "properties: " + str(self.properties)
         if self.sub_nodes:
             string = string + '\n' + "subnodes: " + str(self.sub_nodes)
+        return string
+
+class Nemo_Connection:
+
+    name = None
+    endpoints = []
+
+    def __init__(self, name, endpoints):
+        self.name = name
+        self.endpoints = endpoints
+
+    def __str__(self):
+        string = "name: " + self.name + '\n' + "endpoints: " + str(self.endpoints)
         return string
 
 def parse_Intent(intent_file):
@@ -75,6 +92,16 @@ def parse_Intent(intent_file):
                             subnodes.append(words[index])
                             index = index + 1
                            
-                Intent.objects.append_Node(name, node_type, subnodes, properties)       
+                Intent.objects.append_Node(name, node_type, subnodes, properties)  
+
+            #Get connections
+            if words[1] == 'Connection':
+                   name = words[2]
+                   index = 4
+                   endpoints = []
+                   while index < len(words):
+                       endpoints.append(words[index])
+                       index = index + 1
+                   Intent.objects.append_Connect(name, endpoints)
 
     return Intent
