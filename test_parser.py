@@ -1,4 +1,6 @@
+import sys
+
 from nemo_parser import *
 
-Intent = Nemo_Intent()
+Intent = parse_Intent(sys.argv[1])
 print Intent.sentences

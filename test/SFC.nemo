@@ -1,4 +1,3 @@
-Engines: 127.0.0.1;
 CREATE "user2", "abc", "tenant";
 
 IMPORT Node server1 Type host;
