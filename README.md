@@ -10,3 +10,5 @@ To test the parser functionaility use:
 ```
 python test_parser.py test/SFC.nemo
 ```
+
+Compatibility with Nodemodels coming soon
